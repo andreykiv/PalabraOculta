@@ -10,6 +10,7 @@ public class MainApp {
 	      EventQueue.invokeLater(new Runnable() {
 	            public void run() {
 	            	new AplicacionGrafica();
+	            	//testeo
 	            }
 	        });
 	}
