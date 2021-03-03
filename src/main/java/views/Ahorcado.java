@@ -28,6 +28,8 @@ import javax.swing.ImageIcon;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.border.EtchedBorder;
@@ -44,9 +46,6 @@ public class Ahorcado extends JFrame {
 	//creamos un array de strings que pasaremos al campo textField
 	String[] passArr = new String [] {"uno", "pass", "adiviname", "cuartopass", "muyfacil", "superdooper", 
 			"hellothere", "general", "kenobi", "end"};
-	
-	
-	
 	
 	//METODOS
 	//random index del String de pass
@@ -379,17 +378,27 @@ public class Ahorcado extends JFrame {
 		panel_2.setBorder(
 				new TitledBorder(null, "Palabra secreta", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
-		JLabel bombilla1 = new JLabel("New label");
+		JLabel bombilla1 = new JLabel("");
 		bombilla1.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
+		
+		bombilla1.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				JOptionPane.showMessageDialog(null, "Click sobre bombilla!");
+			}
+		});
 
-		JLabel bombilla2 = new JLabel("New label");
+		JLabel bombilla2 = new JLabel("");
 		bombilla2.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
 		
-		JLabel bombilla3 = new JLabel("New label");
+		JLabel bombilla3 = new JLabel("");
 		bombilla3.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
 		
-		JLabel bombilla4 = new JLabel("New label");
+		JLabel bombilla4 = new JLabel("");
 		bombilla4.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
+		
+		JLabel bombilla5 = new JLabel("");
+		bombilla5.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
+		
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
 			gl_panel_1.createParallelGroup(Alignment.TRAILING)
@@ -400,15 +409,17 @@ public class Ahorcado extends JFrame {
 							.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(bombilla1, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+							.addComponent(bombilla1, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(bombilla2, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(bombilla3, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(bombilla4, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(bombilla4, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(bombilla5, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(28, Short.MAX_VALUE))
-		);
+		)));
 		gl_panel_1.setVerticalGroup(
 			gl_panel_1.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_1.createSequentialGroup()
@@ -417,7 +428,8 @@ public class Ahorcado extends JFrame {
 						.addComponent(bombilla2)
 						.addComponent(bombilla1)
 						.addComponent(bombilla3)
-						.addComponent(bombilla4))
+						.addComponent(bombilla4)
+						.addComponent(bombilla5))
 					.addGap(18)
 					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
 					.addGap(101))
