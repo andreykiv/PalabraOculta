@@ -2,6 +2,7 @@ package main;
 
 import java.awt.EventQueue;
 
+import views.Ahorcado;
 import views.AplicacionGrafica;
 
 public class MainApp {
@@ -10,7 +11,8 @@ public class MainApp {
 	      EventQueue.invokeLater(new Runnable() {
 	            public void run() {
 	            	new AplicacionGrafica();
-	            	//testeo
+	            	Ahorcado juego =  new Ahorcado();
+	            	juego.setVisible(true);
 	            }
 	        });
 	}
