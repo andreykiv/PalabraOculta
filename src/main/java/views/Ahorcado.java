@@ -21,12 +21,14 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
+import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
@@ -38,7 +40,27 @@ import javax.swing.JComboBox;
 public class Ahorcado extends JFrame {
 	// private Image icono1;
 	private JPanel contentPane;
-
+	
+	//creamos un array de strings que pasaremos al campo textField
+	String[] passArr = new String [] {"uno", "pass", "adiviname", "cuartopass", "muyfacil", "superdooper", 
+			"hellothere", "general", "kenobi", "end"};
+	
+	
+	
+	
+	//METODOS
+	//random index del String de pass
+	private int randomIndex() {
+		Random rnd = new Random();
+		int num = rnd.nextInt(10);
+		return num;
+	}
+	
+	private String randomPass() {
+		String myPass = "";
+		myPass = passArr[randomIndex()];	
+		return myPass;
+	}
 	/*protected JButton botones[] = new JButton[27];
     protected String[] abecedario= {"A","B","C","D","E","F","G","H","I","J",
     		"K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"};{
@@ -181,6 +203,7 @@ public class Ahorcado extends JFrame {
 		JButton letraF = new JButton("F");
 		letraF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 			}
 		});
 		
@@ -421,10 +444,19 @@ public class Ahorcado extends JFrame {
 		lblNewLabel.setLabelFor(inicia);
 		inicia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//asignamos la palabra escogiendo aleatoriamente del array de strings y transformamos al appercase
+				palabraSecreta.setText(randomPass().toUpperCase());
 			}
 		});
 
 		JButton resuelve = new JButton("Resolver");
+		resuelve.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//cambiamos el fondo de background para mostrar la palabra
+				palabraSecreta.setBackground(Color.WHITE);
+			}
+		});
+		
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
 				.createSequentialGroup().addGap(35)
