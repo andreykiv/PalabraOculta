@@ -30,6 +30,7 @@ import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.border.EtchedBorder;
@@ -44,8 +45,12 @@ public class Ahorcado extends JFrame {
 	private JPanel contentPane;
 	
 	//creamos un array de strings que pasaremos al campo textField
-	String[] passArr = new String [] {"uno", "pass", "adiviname", "cuartopass", "muyfacil", "superdooper", 
-			"hellothere", "general", "kenobi", "end"};
+	private String[] passArr = new String [] {"UNO", "DOS", "ADIVINAPASS", "CUARTOPASS", "MUYFACIL", "SUPERDOOPER", 
+			"HELLOTHERE", "GENERAL", "KENOBI", "THEEND"};
+	private JButton abecedario[] = new JButton[27];
+	//pass
+	private String pass;
+	private ArrayList<Character> caracteresPass = new ArrayList<Character>();
 	
 	//METODOS
 	//random index del String de pass
@@ -55,10 +60,37 @@ public class Ahorcado extends JFrame {
 		return num;
 	}
 	
-	private String randomPass() {
+	private void randomPass() {
 		String myPass = "";
 		myPass = passArr[randomIndex()];	
-		return myPass;
+		pass = myPass;
+	}
+	//metodo que construye un array de chars que compone la palabra pass 
+	private void splitPass() {
+		for(int i = 0; i < pass.length(); i++) {
+			caracteresPass.add(pass.charAt(i));
+		}
+	}
+	
+	//metodo que verifica si la letra pulsada está dentro del array de chars que compone la palabra pass
+	private boolean siExiste(JButton letra) {
+		boolean existe = false;
+		//recorremos la array de chars 
+		for(int i = 0; i < caracteresPass.size(); i++) {
+				if(letra.getText().equals(caracteresPass.get(i).toString())) {
+					existe = true;
+				} else {
+					//si no está incluida en dentro de la palabra secreta deshabilitar el boton
+					letra.setEnabled(false);
+				}
+		}
+		return existe;
+	}
+	
+	
+	
+	private void deshabilitarBotones() {
+		
 	}
 	/*protected JButton botones[] = new JButton[27];
     protected String[] abecedario= {"A","B","C","D","E","F","G","H","I","J",
@@ -209,12 +241,19 @@ public class Ahorcado extends JFrame {
 		JButton letraG = new JButton("G");
 		
 		JButton letraH = new JButton("H");
+		letraH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				siExiste(letraH);
+			}
+		});
+		
 		
 		JButton letraI = new JButton("I");
 		
 		JButton letraJ = new JButton("J");
 		letraJ.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
 			}
 		});
 		
@@ -229,6 +268,7 @@ public class Ahorcado extends JFrame {
 		});
 		
 		JButton letraN = new JButton("N");
+		letraN.setEnabled(false);
 		
 		JButton letraÑ = new JButton("Ñ");
 		
@@ -456,8 +496,12 @@ public class Ahorcado extends JFrame {
 		lblNewLabel.setLabelFor(inicia);
 		inicia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//asignamos la palabra escogiendo aleatoriamente del array de strings y transformamos al appercase
-				palabraSecreta.setText(randomPass().toUpperCase());
+				//asignamos el valor del pass a la variable pass con este metodo
+				randomPass();
+				// dividimos la palabra secreta en un array de chars
+				splitPass();
+				//asignamos la palabra escogiendo aleatoriamente del array de strings y transformamos al uppercase
+				palabraSecreta.setText(pass);
 			}
 		});
 
