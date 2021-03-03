@@ -47,10 +47,12 @@ public class Ahorcado extends JFrame {
 	//creamos un array de strings que pasaremos al campo textField
 	private String[] passArr = new String [] {"UNO", "DOS", "ADIVINAPASS", "CUARTOPASS", "MUYFACIL", "SUPERDOOPER", 
 			"HELLOTHERE", "GENERAL", "KENOBI", "THEEND"};
-	private JButton abecedario[] = new JButton[27];
+	
 	//pass
 	private String pass;
 	private ArrayList<Character> caracteresPass = new ArrayList<Character>();
+	private ArrayList<JButton> botonesAbecedario = new ArrayList<JButton>();
+	
 	
 	//METODOS
 	//random index del String de pass
@@ -86,40 +88,19 @@ public class Ahorcado extends JFrame {
 		}
 		return existe;
 	}
-	
-	
-	
+	//desabilitar cada boton del teclado
 	private void deshabilitarBotones() {
-		
+		for(int i = 0; i < botonesAbecedario.size(); i++) {
+			botonesAbecedario.get(i).setEnabled(false);
+		}
 	}
-	/*protected JButton botones[] = new JButton[27];
-    protected String[] abecedario= {"A","B","C","D","E","F","G","H","I","J",
-    		"K","L","M","N","Ñ","O","P","Q","R","S","T","U","V","W","X","Y","Z"};{
-   
-    for( int i=0; i < 27; i++ ) {
-        JButton botonera;
-        botonera = new JButton(abecedario[i]);
-        //botonera.setBorder("ALGO");
-        botonera.setName( new Integer(i).toString() );
-        contentPane.add( botonera );
-      }
-      setSize(200,200);
-    }*/
-    
-    
-	/*
-	 * private void preInit() { icono1 = new
-	 * ImageIcon("medidas_bombilla.png").getImage(); }
-	 */
-
-	/*
-	 * private void paint(Graphics g) {
-	 * g.drawImage(icono1,0,0,getWidth(),getHeight(),this); }
-	 */
-
-	/**
-	 * Launch the application.
-	 */
+	
+	//abilitar cada boton del teclado
+	private void habilitarBotones() {
+		for(int i = 0; i < botonesAbecedario.size(); i++) {
+			botonesAbecedario.get(i).setEnabled(true);
+		}
+	}
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -162,8 +143,6 @@ public class Ahorcado extends JFrame {
 		panel_1.setBackground(Color.WHITE);
 		panel_1.setForeground(Color.WHITE);
 
-		// JLabel bombi1 = new JLabel(new
-		// ImageIcon("/src/main/java/imagenes/medidas_bombilla.PNG"));
 		panel_1.setBorder(new LineBorder(UIManager.getColor("CheckBox.foreground")));
 		
 		JPanel panel_3 = new JPanel();
@@ -222,16 +201,19 @@ public class Ahorcado extends JFrame {
 		panel_4.setLayout(gl_panel_4);
 		
 		JButton letraA = new JButton("A");
+		botonesAbecedario.add(letraA);
 		
 		JButton letraB = new JButton("B");
+		botonesAbecedario.add(letraB);
 		
 		JButton letraC = new JButton("C");
-		
+		botonesAbecedario.add(letraC);
 		JButton letraD = new JButton("D");
-		
+		botonesAbecedario.add(letraD);
 		JButton letraE = new JButton("E");
-		
+		botonesAbecedario.add(letraE);
 		JButton letraF = new JButton("F");
+		botonesAbecedario.add(letraF);
 		letraF.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
@@ -239,8 +221,9 @@ public class Ahorcado extends JFrame {
 		});
 		
 		JButton letraG = new JButton("G");
-		
+		botonesAbecedario.add(letraG);
 		JButton letraH = new JButton("H");
+		botonesAbecedario.add(letraH);
 		letraH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				siExiste(letraH);
@@ -249,8 +232,9 @@ public class Ahorcado extends JFrame {
 		
 		
 		JButton letraI = new JButton("I");
-		
+		botonesAbecedario.add(letraI);
 		JButton letraJ = new JButton("J");
+		botonesAbecedario.add(letraJ);
 		letraJ.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			
@@ -258,43 +242,44 @@ public class Ahorcado extends JFrame {
 		});
 		
 		JButton letraL = new JButton("L");
-		
+		botonesAbecedario.add(letraL);
 		JButton letraK = new JButton("K");
-		
+		botonesAbecedario.add(letraK);
 		JButton letraM = new JButton("M");
+		botonesAbecedario.add(letraM);
 		letraM.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
 		JButton letraN = new JButton("N");
-		letraN.setEnabled(false);
-		
+		botonesAbecedario.add(letraN);
 		JButton letraÑ = new JButton("Ñ");
-		
+		botonesAbecedario.add(letraÑ);
 		JButton letraO = new JButton("O");
-		
+		botonesAbecedario.add(letraO);
 		JButton letraP = new JButton("P");
-		
+		botonesAbecedario.add(letraP);
 		JButton letraQ = new JButton("Q");
-		
+		botonesAbecedario.add(letraQ);
 		JButton letraR = new JButton("R");
-		
+		botonesAbecedario.add(letraR);
 		JButton letraS = new JButton("S");
-		
+		botonesAbecedario.add(letraS);
 		JButton letraT = new JButton("T");
-		
+		botonesAbecedario.add(letraT);
 		JButton letraU = new JButton("U");
-		
+		botonesAbecedario.add(letraU);
 		JButton letraV = new JButton("V");
-		
+		botonesAbecedario.add(letraV);
 		JButton letraW = new JButton("W");
-		
+		botonesAbecedario.add(letraW);
 		JButton letraX = new JButton("X");
-		
+		botonesAbecedario.add(letraX);
 		JButton letraY = new JButton("Y");
-		
+		botonesAbecedario.add(letraY);
 		JButton letraZ = new JButton("Z");
+		botonesAbecedario.add(letraZ);
 		
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
@@ -491,11 +476,15 @@ public class Ahorcado extends JFrame {
 						.addContainerGap(15, Short.MAX_VALUE)));
 		panel_2.setLayout(gl_panel_2);
 		panel_1.setLayout(gl_panel_1);
+		//deshabilitamos los botones al ejecutar el programa
+		deshabilitarBotones();
 
 		JButton inicia = new JButton("Iniciar Juego");
 		lblNewLabel.setLabelFor(inicia);
 		inicia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				//habilitamos los botones del teclado
+				habilitarBotones();
 				//asignamos el valor del pass a la variable pass con este metodo
 				randomPass();
 				// dividimos la palabra secreta en un array de chars
@@ -542,4 +531,5 @@ public class Ahorcado extends JFrame {
 		 */
 
 	}
+	
 }
