@@ -56,6 +56,12 @@ public class Ahorcado extends JFrame {
 	private ArrayList<JButton> botonesAbecedario = new ArrayList<JButton>();
 	//array de JLabel del mismo tamaño que caracteresPass
 	private ArrayList<JLabel> labelsPorPass = new ArrayList<JLabel>();
+	//palabraSecreta
+	private JLabel palabraSecreta = new JLabel("_");
+	//label del ahorcado el icono se asigna al clickar alguno de los botones del teclado
+	private JLabel lblNewLabel = new JLabel("");
+	//button iniciarJuego
+	private JButton inicia = new JButton("Iniciar Juego");
 	
 	//atributos de la partida
 	private int fallos = 0;
@@ -117,7 +123,7 @@ public class Ahorcado extends JFrame {
 	}
 	
 	//añadir los labels al arraylist de labelsPorPass
-	private void popularLabelsPorPass() {
+	private void poblarLabelsPorPass() {
 		int x = 25;
 		for(int i = 0; i < caracteresPass.size(); i++) {
 			JLabel newLabel = new JLabel("_");
@@ -138,12 +144,40 @@ public class Ahorcado extends JFrame {
 		return palabraSecretaDisplay;
 	}
 	
-//	private void finPartida() {
-//		if(fallos == 10) {
-//			JOptionPane.showMessageDialog(null, "FIN");
-////			JOptionPane.showInputDialog()
-//		}
-//	}
+	public void iniciarJuego() {
+		caracteresPass.clear();
+		labelsPorPass.clear();
+		pass = "";
+		palabraSecreta.setText("_");
+		fallos = 0;
+		lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+		//asignamos el valor del pass a la variable pass con este metodo
+		randomPass();
+		// dividimos la palabra secreta en un array de chars
+		splitPass();
+		//habilitamos los botones del teclado
+		habilitarBotones();
+		//añadimos los labels 
+		poblarLabelsPorPass();
+		//asignamos la palabra escogiendo aleatoriamente del array de strings y transformamos al uppercase
+		palabraSecreta.setText(palabraSecretaDisplay());
+		//desactivamos el boton
+		inicia.setEnabled(false);
+	}
+	
+	public void finDelJuego() {
+		if(fallos == 10) {
+			String[] options = {"Jugar de nuevo", "Salir"};
+			
+			int opciones = JOptionPane.showOptionDialog(contentPane, "Has perdido, indica que quieres hacer:", "Fin Partida", 
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+			if(opciones == 1) {
+				System.exit(1);
+			} else if(opciones == 0) {
+				iniciarJuego();
+			}
+		}
+	}
 	
 
 	public Ahorcado() {
@@ -207,8 +241,7 @@ public class Ahorcado extends JFrame {
 							.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 293, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(107, Short.MAX_VALUE))
 		);
-		//label del ahorcado el icono se asigna al clickar alguno de los botones del teclado
-		JLabel lblNewLabel = new JLabel("");
+		
 		
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 		gl_panel_4.setHorizontalGroup(
@@ -511,7 +544,7 @@ public class Ahorcado extends JFrame {
 					.addGap(101))
 		);
 
-		JLabel palabraSecreta = new JLabel("_");
+		
 		palabraSecreta.setBackground(Color.WHITE);// aquí, el fons del jtextpane de la paraula secreta esta en negre;
 													// fer funció que cambie de BLACK a WHITE per a que revele la
 													// paraula (en lo botó resolver)
@@ -534,16 +567,8 @@ public class Ahorcado extends JFrame {
 		lblNewLabel.setLabelFor(inicia);
 		inicia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//asignamos el valor del pass a la variable pass con este metodo
-				randomPass();
-				// dividimos la palabra secreta en un array de chars
-				splitPass();
-				//habilitamos los botones del teclado
-				habilitarBotones();
-				//añadimos los labels 
-				popularLabelsPorPass();
-				//asignamos la palabra escogiendo aleatoriamente del array de strings y transformamos al uppercase
-				palabraSecreta.setText(palabraSecretaDisplay());
+				//iniciar juego
+				iniciarJuego();
 				//desactivamos el boton
 				inicia.setEnabled(false);
 			}
@@ -565,6 +590,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -575,6 +601,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -585,6 +612,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -595,6 +623,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -605,6 +634,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 				
 			}
@@ -616,6 +646,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -626,6 +657,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -636,6 +668,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -646,6 +679,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -656,6 +690,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -666,6 +701,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -676,6 +712,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -686,6 +723,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -696,6 +734,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -706,6 +745,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -716,6 +756,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -726,6 +767,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -736,6 +778,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -746,6 +789,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -756,6 +800,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -766,6 +811,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -776,6 +822,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -786,6 +833,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -796,6 +844,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -806,6 +855,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -816,6 +866,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
@@ -826,6 +877,7 @@ public class Ahorcado extends JFrame {
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+					finDelJuego();
 				}
 			}
 		});
