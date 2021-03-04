@@ -57,8 +57,9 @@ public class Ahorcado extends JFrame {
 	//array de JLabel del mismo tamaño que caracteresPass
 	private ArrayList<JLabel> labelsPorPass = new ArrayList<JLabel>();
 	
-	//atributos del juego
+	//atributos de la partida
 	private int fallos = 0;
+
 	
 	
 	//METODOS
@@ -137,20 +138,13 @@ public class Ahorcado extends JFrame {
 		return palabraSecretaDisplay;
 	}
 	
-
+//	private void finPartida() {
+//		if(fallos == 10) {
+//			JOptionPane.showMessageDialog(null, "FIN");
+////			JOptionPane.showInputDialog()
+//		}
+//	}
 	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Ahorcado frame = new Ahorcado();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	public Ahorcado() {
 
@@ -213,11 +207,8 @@ public class Ahorcado extends JFrame {
 							.addComponent(panel_3, GroupLayout.PREFERRED_SIZE, 293, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap(107, Short.MAX_VALUE))
 		);
-		
+		//label del ahorcado el icono se asigna al clickar alguno de los botones del teclado
 		JLabel lblNewLabel = new JLabel("");
-		
-		
-		
 		
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 		gl_panel_4.setHorizontalGroup(
@@ -538,7 +529,7 @@ public class Ahorcado extends JFrame {
 		panel_1.setLayout(gl_panel_1);
 		//deshabilitamos los botones al ejecutar el programa
 		deshabilitarBotones();
-
+		
 		JButton inicia = new JButton("Iniciar Juego");
 		lblNewLabel.setLabelFor(inicia);
 		inicia.addActionListener(new ActionListener() {

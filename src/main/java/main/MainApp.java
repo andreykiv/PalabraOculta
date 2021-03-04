@@ -8,12 +8,15 @@ import views.AplicacionGrafica;
 public class MainApp {
 
 	public static void main(String[] args) {
-	      EventQueue.invokeLater(new Runnable() {
-	            public void run() {
-	            	new AplicacionGrafica();
-	            	Ahorcado juego =  new Ahorcado();
-	            	juego.setVisible(true);
-	            }
-	        });
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Ahorcado frame = new Ahorcado();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }
