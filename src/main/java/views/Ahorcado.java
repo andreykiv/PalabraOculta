@@ -165,11 +165,24 @@ public class Ahorcado extends JFrame {
 		inicia.setEnabled(false);
 	}
 	
-	public void finDelJuego() {
+	public void siPierde() {
 		if(fallos == 10) {
 			String[] options = {"Jugar de nuevo", "Salir"};
 			
 			int opciones = JOptionPane.showOptionDialog(contentPane, "Has perdido, indica que quieres hacer:", "Fin Partida", 
+					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
+			if(opciones == 1) {
+				System.exit(1);
+			} else if(opciones == 0) {
+				iniciarJuego();
+			}
+		}
+	}
+	public void siGana() {
+		if(palabraSecreta.getText().equals(pass)) {
+			String[] options = {"Jugar de nuevo", "Salir"};
+			
+			int opciones = JOptionPane.showOptionDialog(contentPane, "Has ganado, indica que quieres hacer:", "Fin Partida", 
 					JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 			if(opciones == 1) {
 				System.exit(1);
@@ -587,10 +600,11 @@ public class Ahorcado extends JFrame {
 				if(siExiste(letraA)) {
 					//modificamos los elementos de la palabra secreta que se muestra al user
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -598,10 +612,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(siExiste(letraB)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -609,10 +624,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if(siExiste(letraC)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -620,10 +636,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraD)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -631,10 +648,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraE)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 				
 			}
@@ -643,10 +661,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraF)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -654,10 +673,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraG)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -665,10 +685,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraH)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -676,10 +697,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraI)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -687,10 +709,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraJ)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -698,10 +721,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraL)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -709,10 +733,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraK)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -720,10 +745,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraM)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -731,10 +757,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraN)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -742,10 +769,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraÑ)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -753,10 +781,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraO)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -764,10 +793,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraP)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -775,10 +805,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraQ)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -786,10 +817,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraR)){
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -797,10 +829,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraS)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -808,10 +841,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraT)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -819,10 +853,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraU)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -830,10 +865,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraV)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -841,10 +877,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraW)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -852,10 +889,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraX)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -863,10 +901,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraY)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
@@ -874,10 +913,11 @@ public class Ahorcado extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(siExiste(letraZ)) {
 					palabraSecreta.setText(palabraSecretaDisplay());
+					siGana();
 				} else {
 					fallos++;	
 					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					finDelJuego();
+					siPierde();
 				}
 			}
 		});
