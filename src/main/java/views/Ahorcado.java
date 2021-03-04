@@ -1,6 +1,6 @@
 package views;
 
-import java.awt.BorderLayout;
+
 import java.awt.Button;
 import java.awt.EventQueue;
 import java.awt.Graphics;
@@ -41,7 +41,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.JComboBox;
 
 public class Ahorcado extends JFrame {
-	// private Image icono1;
+
 	private JPanel contentPane;
 	
 	//creamos un array de strings que pasaremos al campo textField
@@ -50,8 +50,15 @@ public class Ahorcado extends JFrame {
 	
 	//pass
 	private String pass;
+	//array de caracteres de la paraula pass
 	private ArrayList<Character> caracteresPass = new ArrayList<Character>();
+	//array de botones del teclado
 	private ArrayList<JButton> botonesAbecedario = new ArrayList<JButton>();
+	//array de JLabel del mismo tamaño que caracteresPass
+	private ArrayList<JLabel> labelsPorPass = new ArrayList<JLabel>();
+	
+	//atributos del juego
+	private int fallos = 5;
 	
 	
 	//METODOS
@@ -80,27 +87,58 @@ public class Ahorcado extends JFrame {
 		//recorremos la array de chars 
 		for(int i = 0; i < caracteresPass.size(); i++) {
 				if(letra.getText().equals(caracteresPass.get(i).toString())) {
+					//si la letra existe, cambiamos el texto de JLabel de la misma posicion donde hay coincidencia
+					for(int z = 0; z < labelsPorPass.size(); z++) {
+						if(z == i) {
+							//si el index del label es igual al index del caracteres donde coincide cambiar el texto del label
+							labelsPorPass.get(z).setText(letra.getText());
+						}
+					}
 					existe = true;
-				} else {
-					//si no está incluida en dentro de la palabra secreta deshabilitar el boton
-					letra.setEnabled(false);
 				}
 		}
+		//inhabilitamos el botón
+		letra.setEnabled(false);
 		return existe;
 	}
-	//desabilitar cada boton del teclado
+	//deshabilitar cada boton del teclado
 	private void deshabilitarBotones() {
 		for(int i = 0; i < botonesAbecedario.size(); i++) {
 			botonesAbecedario.get(i).setEnabled(false);
 		}
 	}
 	
-	//abilitar cada boton del teclado
+	//habilitar cada boton del teclado
 	private void habilitarBotones() {
 		for(int i = 0; i < botonesAbecedario.size(); i++) {
 			botonesAbecedario.get(i).setEnabled(true);
 		}
 	}
+	
+	//añadir los labels al arraylist de labelsPorPass
+	private void popularLabelsPorPass() {
+		int x = 25;
+		for(int i = 0; i < caracteresPass.size(); i++) {
+			JLabel newLabel = new JLabel("_");
+			newLabel.setBounds(x, 45, 50, 50);
+			labelsPorPass.add(newLabel);
+			//para cada label la posicion x se aumentará en 25
+			x+=25;
+		}
+	}
+	
+	//palabra secreta que se muestra a medida que se va adivinando
+	private String palabraSecretaDisplay() {
+		
+		String palabraSecretaDisplay = "";
+		for(int i = 0; i < labelsPorPass.size(); i++) {
+			palabraSecretaDisplay+= labelsPorPass.get(i).getText();
+		}
+		return palabraSecretaDisplay;
+	}
+	
+
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -113,10 +151,6 @@ public class Ahorcado extends JFrame {
 			}
 		});
 	}
-
-	/**
-	 * Create the frame.
-	 */
 
 	public Ahorcado() {
 		// preInit();
@@ -182,7 +216,9 @@ public class Ahorcado extends JFrame {
 		);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/1.PNG")));
+		lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + 2 +".PNG")));	
+		
+		
 		GroupLayout gl_panel_4 = new GroupLayout(panel_4);
 		gl_panel_4.setHorizontalGroup(
 			gl_panel_4.createParallelGroup(Alignment.LEADING)
@@ -202,84 +238,107 @@ public class Ahorcado extends JFrame {
 		
 		JButton letraA = new JButton("A");
 		botonesAbecedario.add(letraA);
+
 		
 		JButton letraB = new JButton("B");
 		botonesAbecedario.add(letraB);
+
 		
 		JButton letraC = new JButton("C");
 		botonesAbecedario.add(letraC);
+
+		
 		JButton letraD = new JButton("D");
 		botonesAbecedario.add(letraD);
+
+		
 		JButton letraE = new JButton("E");
 		botonesAbecedario.add(letraE);
+
+		
 		JButton letraF = new JButton("F");
 		botonesAbecedario.add(letraF);
-		letraF.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				
-			}
-		});
 		
 		JButton letraG = new JButton("G");
 		botonesAbecedario.add(letraG);
+
 		JButton letraH = new JButton("H");
 		botonesAbecedario.add(letraH);
-		letraH.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				siExiste(letraH);
-			}
-		});
-		
-		
+
 		JButton letraI = new JButton("I");
 		botonesAbecedario.add(letraI);
+
+		
 		JButton letraJ = new JButton("J");
 		botonesAbecedario.add(letraJ);
-		letraJ.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			
-			}
-		});
+
 		
 		JButton letraL = new JButton("L");
 		botonesAbecedario.add(letraL);
+
+		
 		JButton letraK = new JButton("K");
 		botonesAbecedario.add(letraK);
+
+		
 		JButton letraM = new JButton("M");
 		botonesAbecedario.add(letraM);
-		letraM.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+
 		
 		JButton letraN = new JButton("N");
 		botonesAbecedario.add(letraN);
+
+		
 		JButton letraÑ = new JButton("Ñ");
 		botonesAbecedario.add(letraÑ);
+
 		JButton letraO = new JButton("O");
 		botonesAbecedario.add(letraO);
+
+		
 		JButton letraP = new JButton("P");
 		botonesAbecedario.add(letraP);
+
+		
 		JButton letraQ = new JButton("Q");
 		botonesAbecedario.add(letraQ);
+
+		
 		JButton letraR = new JButton("R");
 		botonesAbecedario.add(letraR);
+
+		
 		JButton letraS = new JButton("S");
 		botonesAbecedario.add(letraS);
+
+		
 		JButton letraT = new JButton("T");
 		botonesAbecedario.add(letraT);
+
+		
 		JButton letraU = new JButton("U");
 		botonesAbecedario.add(letraU);
+
+		
 		JButton letraV = new JButton("V");
 		botonesAbecedario.add(letraV);
+
+		
 		JButton letraW = new JButton("W");
 		botonesAbecedario.add(letraW);
+
+		
 		JButton letraX = new JButton("X");
 		botonesAbecedario.add(letraX);
+
+		
 		JButton letraY = new JButton("Y");
 		botonesAbecedario.add(letraY);
+
+		
 		JButton letraZ = new JButton("Z");
 		botonesAbecedario.add(letraZ);
+
 		
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
@@ -460,8 +519,8 @@ public class Ahorcado extends JFrame {
 					.addGap(101))
 		);
 
-		JTextPane palabraSecreta = new JTextPane();
-		palabraSecreta.setBackground(Color.BLACK);// aquí, el fons del jtextpane de la paraula secreta esta en negre;
+		JLabel palabraSecreta = new JLabel("_");
+		palabraSecreta.setBackground(Color.WHITE);// aquí, el fons del jtextpane de la paraula secreta esta en negre;
 													// fer funció que cambie de BLACK a WHITE per a que revele la
 													// paraula (en lo botó resolver)
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -483,14 +542,16 @@ public class Ahorcado extends JFrame {
 		lblNewLabel.setLabelFor(inicia);
 		inicia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//habilitamos los botones del teclado
-				habilitarBotones();
 				//asignamos el valor del pass a la variable pass con este metodo
 				randomPass();
 				// dividimos la palabra secreta en un array de chars
 				splitPass();
+				//habilitamos los botones del teclado
+				habilitarBotones();
+				//añadimos los labels 
+				popularLabelsPorPass();
 				//asignamos la palabra escogiendo aleatoriamente del array de strings y transformamos al uppercase
-				palabraSecreta.setText(pass);
+				palabraSecreta.setText(palabraSecretaDisplay());
 			}
 		});
 
@@ -498,10 +559,206 @@ public class Ahorcado extends JFrame {
 		resuelve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//cambiamos el fondo de background para mostrar la palabra
-				palabraSecreta.setBackground(Color.WHITE);
+				palabraSecreta.setText(pass);
 			}
 		});
 		
+		letraA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(siExiste(letraA)) {
+					//modificamos los elementos de la palabra secreta que se muestra al user
+					palabraSecreta.setText(palabraSecretaDisplay());
+				} else {
+					fallos++;
+				}
+			}
+		});
+		letraB.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(siExiste(letraB)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				};
+			}
+		});
+		letraC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(siExiste(letraC)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+				
+			}
+		});
+		letraD.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraD)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraE.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraE)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+				
+			}
+		});
+		letraF.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraF)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraG.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraG)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraH.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraH)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraI.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraI)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraJ.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraJ)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraL.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraL)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraK.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraK)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraM.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraM)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraN)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraÑ.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraÑ)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraO.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraO)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraP.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraP)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraQ.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraQ)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraR.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraR)){
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraS.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraS)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraT.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraT)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraU.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraU)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraV.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraV)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraW.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraW)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraX.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraX)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraY.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraY)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		letraZ.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(siExiste(letraZ)) {
+					palabraSecreta.setText(palabraSecretaDisplay());
+				}
+			}
+		});
+		
+
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
 				.createSequentialGroup().addGap(35)
@@ -514,21 +771,6 @@ public class Ahorcado extends JFrame {
 						.addComponent(inicia).addGap(18).addComponent(resuelve).addContainerGap(26, Short.MAX_VALUE)));
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
-
-		/*
-		 * contentPane.setLayout(new FormLayout(new ColumnSpec[] {
-		 * FormSpecs.RELATED_GAP_COLSPEC, FormSpecs.DEFAULT_COLSPEC,
-		 * FormSpecs.RELATED_GAP_COLSPEC, FormSpecs.DEFAULT_COLSPEC,}, new RowSpec[] {
-		 * FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-		 * FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,
-		 * FormSpecs.RELATED_GAP_ROWSPEC, FormSpecs.DEFAULT_ROWSPEC,}));
-		 * 
-		 * JButton inicia = new JButton("Iniciar Juego"); contentPane.add(inicia,
-		 * "4, 4");
-		 * 
-		 * JButton resuelve = new JButton("Resolver"); contentPane.add(resuelve,
-		 * "4, 6");
-		 */
 
 	}
 	
