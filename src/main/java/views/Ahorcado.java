@@ -21,6 +21,9 @@ import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -45,28 +48,34 @@ public class Ahorcado extends JFrame {
 	private JPanel contentPane;
 	
 	//creamos un array de strings que pasaremos al campo textField
-	private String[] passArr = new String [] {"UNO", "DOS", "ADIVINAPASS", "CUARTOPASS", "MUYFACIL", "SUPERDOOPER", 
+	private String[] passArr = new String [] {"NOTMYPASS", "MYPASS", "TOOEASY", "SUPERMAN", "BATMAN", "HACKERMAN", 
 			"HELLOTHERE", "GENERAL", "KENOBI", "THEEND"};
 	
 	//pass
 	private String pass;
-	//array de caracteres de la paraula pass
+	//array de caracteres de la palabra pass
 	private ArrayList<Character> caracteresPass = new ArrayList<Character>();
 	//array de botones del teclado
 	private ArrayList<JButton> botonesAbecedario = new ArrayList<JButton>();
-	//array de JLabel del mismo tamaño que caracteresPass
+	
+	//array de letras del abecedario
+	private ArrayList<JButton> letrasAbecedario = new ArrayList<JButton>();
+	//array de JLabel 
 	private ArrayList<JLabel> labelsPorPass = new ArrayList<JLabel>();
 	//palabraSecreta
 	private JLabel palabraSecreta = new JLabel("_");
 	//label del ahorcado el icono se asigna al clickar alguno de los botones del teclado
 	private JLabel lblNewLabel = new JLabel("");
-	//button iniciarJuego
-	private JButton inicia = new JButton("Iniciar Juego");
+	//botones resolver e iniciar el juego
+	private JButton inicia, resuelve ;
+	
+//	private JButton[] letras = new JButton[] { letraA, letraB, letraC, letraD, letraE, letraF, letraG, letraH, letraI, 
+//			letraJ, letraK, letraL, letraM, letraN, letraÑ, letraO, letraP, letraQ, letraR, letraS, 
+//			letraT, letraU, letraV, letraW, letraX, letraY, letraZ };
+	private JButton[] letras = new JButton[27];
 	
 	//atributos de la partida
 	private int fallos = 0;
-
-	
 	
 	//METODOS
 	//random index del String de pass
@@ -87,7 +96,48 @@ public class Ahorcado extends JFrame {
 			caracteresPass.add(pass.charAt(i));
 		}
 	}
-	
+	//creamos los botones del teclado y los pasamos a la array de botonesAbecedario utilizando los valores ASCII
+	private void crearBotones() {
+		int numLetrasAbecedario = 27;
+		//int del ASCII que equivale a la letra "A"
+		int startChartAt = 65;
+		//bucle para recorrer el array de letras 
+		for(int i = 0; i < numLetrasAbecedario; i++) {
+			String letra = "";
+			String newChar = String.valueOf((char) startChartAt);
+			letra = newChar;
+			//en la posicion 14 del abecedario añadimos la letra Ñ que no coincide con el rango recorrido de caracteres dentro de ASCII
+			if(i == 14) {
+				letra = "Ñ";
+			}
+			//asignamos el texto de la letra obtenida al boton
+			letras[i] = new JButton(letra);
+			//asignamos los botones al array de botones
+			botonesAbecedario.add(letras[i]);
+			//aumentamos el numero de ASCII por 1
+			startChartAt++;
+		}
+	}
+
+	//Recorremos la array de botones y ejecutamos los metodos pertinentes al hacer el click sobre cada boton
+	private void alClickarBotonTeclado() {
+			for(JButton boton : botonesAbecedario){
+				//añadimos el action listener al boton
+				boton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(siExiste(boton)) {
+						palabraSecreta.setText(palabraSecretaDisplay());
+						siGana();
+					} else {
+						fallos++;	
+						lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+						siPierde();
+					}
+				}
+			});
+		}
+	}
+
 	//metodo que verifica si la letra pulsada está dentro del array de chars que compone la palabra pass
 	private boolean siExiste(JButton letra) {
 		boolean existe = false;
@@ -144,13 +194,15 @@ public class Ahorcado extends JFrame {
 		return palabraSecretaDisplay;
 	}
 	
-	public void iniciarJuego() {
+	public void iniciarPartida() {
+		//con cada nueva partida reiniciamos los atributos
 		caracteresPass.clear();
 		labelsPorPass.clear();
 		pass = "";
 		palabraSecreta.setText("_");
 		fallos = 0;
 		lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+		
 		//asignamos el valor del pass a la variable pass con este metodo
 		randomPass();
 		// dividimos la palabra secreta en un array de chars
@@ -163,8 +215,9 @@ public class Ahorcado extends JFrame {
 		palabraSecreta.setText(palabraSecretaDisplay());
 		//desactivamos el boton
 		inicia.setEnabled(false);
+		
 	}
-	
+	//mostramos la ventana con opciones de volver a jugar o salir cuando user pierde
 	public void siPierde() {
 		if(fallos == 10) {
 			String[] options = {"Jugar de nuevo", "Salir"};
@@ -174,10 +227,11 @@ public class Ahorcado extends JFrame {
 			if(opciones == 1) {
 				System.exit(1);
 			} else if(opciones == 0) {
-				iniciarJuego();
+				iniciarPartida();
 			}
 		}
 	}
+	//mostramos la ventana con opciones de volver a jugar o salir cuando user gana
 	public void siGana() {
 		if(palabraSecreta.getText().equals(pass)) {
 			String[] options = {"Jugar de nuevo", "Salir"};
@@ -187,12 +241,11 @@ public class Ahorcado extends JFrame {
 			if(opciones == 1) {
 				System.exit(1);
 			} else if(opciones == 0) {
-				iniciarJuego();
+				iniciarPartida();
 			}
 		}
 	}
 	
-
 	public Ahorcado() {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -206,7 +259,21 @@ public class Ahorcado extends JFrame {
 		setTitle("Ahorcado");
 		setBounds(200, 200, 700, 800);
 		contentPane.setBorder(BorderFactory.createTitledBorder(""));
-
+		//barramenu 
+		JMenuBar barraMenu = new JMenuBar();
+		
+		JMenu archivo = new JMenu("Archivo");
+	
+		JMenuItem comoJugar = new JMenuItem("Como Jugar");
+		JMenuItem acercaDe = new JMenuItem("Acerca De");
+		
+		archivo.add(comoJugar);
+		archivo.add(acercaDe);
+		
+		barraMenu.add(archivo);
+		//aplicamos la barramenu a la ventana principal
+		setJMenuBar(barraMenu);
+		
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
 		panel.setBorder(new TitledBorder(
@@ -375,7 +442,8 @@ public class Ahorcado extends JFrame {
 		
 		JButton letraZ = new JButton("Z");
 		botonesAbecedario.add(letraZ);
-
+		
+		
 		
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
@@ -502,7 +570,6 @@ public class Ahorcado extends JFrame {
 		JLabel bombilla1 = new JLabel("");
 		bombilla1.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
 		
-		
 		bombilla1.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				JOptionPane.showMessageDialog(null, "Click sobre bombilla!");
@@ -558,9 +625,8 @@ public class Ahorcado extends JFrame {
 		);
 
 		
-		palabraSecreta.setBackground(Color.WHITE);// aquí, el fons del jtextpane de la paraula secreta esta en negre;
-													// fer funció que cambie de BLACK a WHITE per a que revele la
-													// paraula (en lo botó resolver)
+		palabraSecreta.setBackground(Color.WHITE);
+		
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup().addContainerGap()
@@ -573,21 +639,11 @@ public class Ahorcado extends JFrame {
 						.addContainerGap(15, Short.MAX_VALUE)));
 		panel_2.setLayout(gl_panel_2);
 		panel_1.setLayout(gl_panel_1);
+		
 		//deshabilitamos los botones al ejecutar el programa
 		deshabilitarBotones();
-		
-		JButton inicia = new JButton("Iniciar Juego");
-		lblNewLabel.setLabelFor(inicia);
-		inicia.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//iniciar juego
-				iniciarJuego();
-				//desactivamos el boton
-				inicia.setEnabled(false);
-			}
-		});
 
-		JButton resuelve = new JButton("Resolver");
+		resuelve = new JButton("Resolver");
 		resuelve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//cambiamos el fondo de background para mostrar la palabra
@@ -595,334 +651,24 @@ public class Ahorcado extends JFrame {
 			}
 		});
 		
-		letraA.addActionListener(new ActionListener() {
+		//al ejecutar el programa el boton 'Resolver' está desactivado
+		resuelve.setEnabled(true);
+		
+		inicia = new JButton("Iniciar Juego");
+		lblNewLabel.setLabelFor(inicia);
+		inicia.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(siExiste(letraA)) {
-					//modificamos los elementos de la palabra secreta que se muestra al user
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraB.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(siExiste(letraB)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraC.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				if(siExiste(letraC)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraD.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraD)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraE.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraE)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
+				//iniciar juego
+				iniciarPartida();
+				//desactivamos el boton
+				inicia.setEnabled(false);
 				
 			}
 		});
-		letraF.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraF)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraG.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraG)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraH.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraH)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraI.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraI)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraJ.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraJ)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraL.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraL)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraK.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraK)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraM.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraM)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraN.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraN)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraÑ.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraÑ)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraO.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraO)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraP.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraP)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraQ.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraQ)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraR.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraR)){
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraS.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraS)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraT.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraT)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraU.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraU)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraV.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraV)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraW.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraW)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraX.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraX)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraY.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraY)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
-		letraZ.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(siExiste(letraZ)) {
-					palabraSecreta.setText(palabraSecretaDisplay());
-					siGana();
-				} else {
-					fallos++;	
-					lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-					siPierde();
-				}
-			}
-		});
 		
-
+		//eventos que se ejectutan al clickar los botones del teclado
+		alClickarBotonTeclado();
+		
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
 				.createSequentialGroup().addGap(35)
@@ -937,5 +683,4 @@ public class Ahorcado extends JFrame {
 		contentPane.setLayout(gl_contentPane);
 
 	}
-	
 }
