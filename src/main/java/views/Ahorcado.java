@@ -9,11 +9,15 @@ import java.awt.Panel;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
 import javax.swing.SwingConstants;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+
 import java.awt.Component;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
@@ -67,9 +71,12 @@ public class Ahorcado extends JFrame implements ActionListener{
 	//label del ahorcado el icono se asigna al clickar alguno de los botones del teclado
 	private JLabel lblNewLabel = new JLabel("");
 	//botones resolver e iniciar el juego
-	private JButton inicia, resuelve ;
-
+	private JButton iniciar, resolver;
+	//array de letras que obtenemos del ASCII
 	private JButton[] letras = new JButton[27];
+	
+	//array de bombillas (JLabel)
+	private JButton[] bombillas = new JButton[5];
 	
 	//atributos de la partida
 	private int fallos = 0;
@@ -115,6 +122,15 @@ public class Ahorcado extends JFrame implements ActionListener{
 			startChartAt++;
 		}
 	}
+	
+	//crear bombillas
+	private void crearBombillas() {
+		for (int i = 0; i < 5; i++) {
+			bombillas[i] = new JButton("");
+			//asignamos el icono a cada bombilla creada
+			bombillas[i].setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
+		}
+	}
 
 	//Recorremos la array de botones y ejecutamos los metodos pertinentes al hacer el click sobre cada boton
 	private void alClickarBotonTeclado() {
@@ -122,16 +138,43 @@ public class Ahorcado extends JFrame implements ActionListener{
 				//añadimos el action listener al boton
 				boton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					//si la letra clickada está entre las letras de la palabra secreta
 					if(siExiste(boton)) {
+						//modificamos string palabraSecreta con los valores que nos devuelve el metodo palabraSecretaDisplay
 						palabraSecreta.setText(palabraSecretaDisplay());
+						//comprobamos si se ha ganado
 						siGana();
 					} else {
+						//si la letra clickada no está entre las letras de la palabra sumamos fallos, mostramos siguiente img y verificamos si ha perdido
 						fallos++;	
 						lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
 						siPierde();
 					}
 				}
 			});
+		}
+	}
+	
+	//metodo que muestra la primera letra no visible de la palabra secreta
+	private void activarPista() {
+		//recorremos labelsPorPass para ver la posicion del primer caracter '_'. 
+		for(int z = 0; z < labelsPorPass.size(); z++) {
+			//cuando encontremos la posicion:
+			if(labelsPorPass.get(z).getText().equals("_")) {
+				//cambiamos el primer carater "_" por el caracter de la misma posicion del caracter del array de caracteres 
+				labelsPorPass.get(z).setText(caracteresPass.get(z).toString());
+				//mostramos el campo de palabrasecreta con la primera letra visible
+				palabraSecreta.setText(palabraSecretaDisplay());
+				//sumamos un fallo
+				fallos++;
+				//mostramos imagen actualizada
+				lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
+				//ejecutamos metodos que arrancan si se pierde o gana
+				siGana();
+				siPierde();
+				//salimos del bucle cuando se cumple una vez
+				break;
+			}
 		}
 	}
 
@@ -167,6 +210,7 @@ public class Ahorcado extends JFrame implements ActionListener{
 		for(int i = 0; i < botonesAbecedario.size(); i++) {
 			botonesAbecedario.get(i).setEnabled(true);
 		}
+		
 	}
 	
 	//añadir los labels al arraylist de labelsPorPass
@@ -191,15 +235,18 @@ public class Ahorcado extends JFrame implements ActionListener{
 		return palabraSecretaDisplay;
 	}
 	
-	public void iniciarPartida() {
-		//con cada nueva partida reiniciamos los atributos
+	public void iniciarPartida(int fallosAlEmpezarElJuego) {
+		//cada nueva partida reiniciamos los atributos
+		fallos = fallosAlEmpezarElJuego;
 		caracteresPass.clear();
 		labelsPorPass.clear();
 		pass = "";
 		palabraSecreta.setText("_");
-		fallos = 0;
 		lblNewLabel.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/" + fallos +".PNG")));
-		
+		//volvemos a mostrar las bombillas
+		for(int i = 0; i < 5; i++ ) {
+			bombillas[i].setVisible(true);
+		}
 		//asignamos el valor del pass a la variable pass con este metodo
 		randomPass();
 		// dividimos la palabra secreta en un array de chars
@@ -211,7 +258,7 @@ public class Ahorcado extends JFrame implements ActionListener{
 		//asignamos la palabra escogiendo aleatoriamente del array de strings y transformamos al uppercase
 		palabraSecreta.setText(palabraSecretaDisplay());
 		//desactivamos el boton
-		inicia.setEnabled(false);
+		iniciar.setEnabled(false);
 		
 	}
 	//mostramos la ventana con opciones de volver a jugar o salir cuando user pierde
@@ -224,13 +271,14 @@ public class Ahorcado extends JFrame implements ActionListener{
 			if(opciones == 1) {
 				System.exit(1);
 			} else if(opciones == 0) {
-				iniciarPartida();
+				//si se pierde se inicia la partida como principiante (10 intentos)
+				iniciarPartida(0);
 			}
 		}
 	}
 	//mostramos la ventana con opciones de volver a jugar o salir cuando user gana
 	public void siGana() {
-		if(palabraSecreta.getText().equals(pass)) {
+		if(palabraSecreta.getText().equals(pass) && fallos < 10) {
 			String[] options = {"Jugar de nuevo", "Salir"};
 			
 			int opciones = JOptionPane.showOptionDialog(contentPane, "Has ganado, indica que quieres hacer:", "Fin Partida", 
@@ -238,7 +286,8 @@ public class Ahorcado extends JFrame implements ActionListener{
 			if(opciones == 1) {
 				System.exit(1);
 			} else if(opciones == 0) {
-				iniciarPartida();
+				//si se gana se inicia la partida como principiante (10 intentos)
+				iniciarPartida(0);
 			}
 		}
 	}
@@ -254,9 +303,67 @@ public class Ahorcado extends JFrame implements ActionListener{
 		setContentPane(contentPane);
 
 		setTitle("Ahorcado");
-		setBounds(200, 200, 700, 800);
+		setBounds(600, 160, 700, 800);
 		contentPane.setBorder(BorderFactory.createTitledBorder(""));
-		//barramenu 
+		
+		//PANEL AJUSTES JUEGO(POP-UP)
+		//creamos el panel de popUp al hacer el click sobre el boton de iniciar partida
+		JPanel ajustesJuego = new JPanel();
+		ajustesJuego.setBounds(380, 20, 262, 200);
+		ajustesJuego.setVisible(false);
+		ajustesJuego.setLayout(null);
+		
+		//COMPONENTES panel AjustesJuego
+		JButton empezar = new JButton("Empezar");
+		empezar.setBounds(75, 155, 120, 30);
+		ajustesJuego.add(empezar);
+		
+		JLabel elegirOpciones = new JLabel("Elige el nivel:");
+		elegirOpciones.setBounds(75, 15, 120, 30);
+		ajustesJuego.add(elegirOpciones);
+		
+		JRadioButton opcionPrincipante = new JRadioButton("Principiante", false);
+		opcionPrincipante.setBounds(75, 45, 120, 30);
+		ajustesJuego.add(opcionPrincipante);
+		
+		JRadioButton opcionIntermedio = new JRadioButton("Intermedio", false);
+		opcionIntermedio.setBounds(75, 75, 120, 30);
+		ajustesJuego.add(opcionIntermedio);
+		
+		JRadioButton opcionAvanzado = new JRadioButton("Avanzado", false);
+		opcionAvanzado.setBounds(75, 105, 120, 30);
+		ajustesJuego.add(opcionAvanzado);
+		//juntamos los JRadioButtons
+		ButtonGroup bgroup = new ButtonGroup();
+		bgroup.add(opcionPrincipante);
+		bgroup.add(opcionIntermedio);
+		bgroup.add(opcionAvanzado);
+		
+		empezar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//comprobamos que ha seleccionado el usuario y pasamos el numero de fallos segun lo pulsado a la nueva partida. 
+				if(opcionPrincipante.isSelected()) {
+					//desactivamos el panel ajustesJuego
+					ajustesJuego.setVisible(false);
+					iniciarPartida(0);
+				} else if(opcionIntermedio.isSelected()) {
+					ajustesJuego.setVisible(false);
+					iniciarPartida(2);
+				} else if(opcionAvanzado.isSelected()) {
+					//hacemos el panel ajustesJuego invisible
+					ajustesJuego.setVisible(false);
+					iniciarPartida(4);
+				} else {
+					//si ninguna opcion se ha pulsado le mostramos un aviso al usuario
+					JOptionPane.showMessageDialog(null, "Tienes que elegir una opción");
+				}
+			}
+		});
+		
+		//añadimos el componente POP-UP al contentPane
+		contentPane.add(ajustesJuego);
+		
+		//BARRA MENU Y SUS LISTENERS
 		JMenuBar barraMenu = new JMenuBar();
 		
 		JMenu archivo = new JMenu("Archivo");
@@ -266,13 +373,15 @@ public class Ahorcado extends JFrame implements ActionListener{
 		JMenuItem comoJugarItem = new JMenuItem("Como Jugar");
 		JMenuItem acercaDeItem = new JMenuItem("Acerca de");
 		
-		JMenuItem jugarDeNuevo = new JMenuItem("Nueva partida");
+		JMenuItem nuevoJuego = new JMenuItem("Nuevo juego");
 		JMenuItem salir = new JMenuItem("Salir");
 		
-		jugarDeNuevo.addActionListener(new ActionListener() {
+		nuevoJuego.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//al hacer el click llamamos a la funcion iniciarPartida();
-				iniciarPartida();
+				ajustesJuego.setVisible(true);
+				// y desactivamos los botones
+				deshabilitarBotones();
 			}
 		});
 		
@@ -286,7 +395,7 @@ public class Ahorcado extends JFrame implements ActionListener{
 		comoJugarItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//al hacer el click llamamos a la funcion iniciarPartida();
-				JOptionPane.showMessageDialog(contentPane, "Adivina la palabra seleccionando uno de los botones del teclado.");
+				JOptionPane.showMessageDialog(contentPane, "Acierta la palabra seleccionando una de las letras del teclado.");
 			}
 		});
 		
@@ -297,7 +406,7 @@ public class Ahorcado extends JFrame implements ActionListener{
 			}
 		});
 		
-		archivo.add(jugarDeNuevo);
+		archivo.add(nuevoJuego);
 		archivo.add(salir);
 		
 		comoJugar.add(comoJugarItem);
@@ -306,6 +415,7 @@ public class Ahorcado extends JFrame implements ActionListener{
 		barraMenu.add(archivo);
 		barraMenu.add(comoJugar);
 		barraMenu.add(acercaDe);
+		
 		//aplicamos la barramenu a la ventana principal
 		setJMenuBar(barraMenu);
 		
@@ -601,27 +711,57 @@ public class Ahorcado extends JFrame implements ActionListener{
 		panel_2.setBackground(Color.WHITE);
 		panel_2.setBorder(
 				new TitledBorder(null, "Palabra secreta", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-
-		JLabel bombilla1 = new JLabel("");
-		bombilla1.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
 		
-		bombilla1.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showMessageDialog(null, "Click sobre bombilla!");
+		//creamos las bombillas
+		crearBombillas();
+
+		
+		//LISTENERS PISTAS
+		
+		bombillas[0].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//activamos la pista
+				activarPista();
+				//hacemos desaparecer el boton
+				bombillas[0].setVisible(false);
 			}
 		});
-
-		JLabel bombilla2 = new JLabel("");
-		bombilla2.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
 		
-		JLabel bombilla3 = new JLabel("");
-		bombilla3.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
+		bombillas[1].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//activamos la pista
+				activarPista();
+				//hacemos desaparecer el boton
+				bombillas[1].setVisible(false);
+			}
+		});
 		
-		JLabel bombilla4 = new JLabel("");
-		bombilla4.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
+		bombillas[2].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//activamos la pista
+				activarPista();
+				//hacemos desaparecer el boton
+				bombillas[2].setVisible(false);
+			}
+		});
 		
-		JLabel bombilla5 = new JLabel("");
-		bombilla5.setIcon(new ImageIcon(Ahorcado.class.getResource("/imagenes/medidas_bombilla.PNG")));
+		bombillas[3].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//activamos la pista
+				activarPista();
+				//hacemos desaparecer el boton
+				bombillas[3].setVisible(false);
+			}
+		});
+		
+		bombillas[4].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//activamos la pista
+				activarPista();
+				//hacemos desaparecer el boton
+				bombillas[4].setVisible(false);
+			}
+		});
 		
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
@@ -633,15 +773,15 @@ public class Ahorcado extends JFrame implements ActionListener{
 							.addComponent(panel_2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(bombilla1, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addComponent(bombillas[0], GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(bombilla2, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addComponent(bombillas[1], GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(bombilla3, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addComponent(bombillas[2], GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(bombilla4, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addComponent(bombillas[3], GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(bombilla5, GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
+							.addComponent(bombillas[4], GroupLayout.PREFERRED_SIZE, 45, GroupLayout.PREFERRED_SIZE)
 					.addContainerGap(28, Short.MAX_VALUE))
 		)));
 		gl_panel_1.setVerticalGroup(
@@ -649,11 +789,11 @@ public class Ahorcado extends JFrame implements ActionListener{
 				.addGroup(gl_panel_1.createSequentialGroup()
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 					.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
-						.addComponent(bombilla2)
-						.addComponent(bombilla1)
-						.addComponent(bombilla3)
-						.addComponent(bombilla4)
-						.addComponent(bombilla5))
+						.addComponent(bombillas[1])
+						.addComponent(bombillas[0])
+						.addComponent(bombillas[2])
+						.addComponent(bombillas[3])
+						.addComponent(bombillas[4]))
 					.addGap(18)
 					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
 					.addGap(101))
@@ -678,8 +818,8 @@ public class Ahorcado extends JFrame implements ActionListener{
 		//deshabilitamos los botones al ejecutar el programa
 		deshabilitarBotones();
 
-		resuelve = new JButton("Resolver");
-		resuelve.addActionListener(new ActionListener() {
+		resolver = new JButton("Resolver");
+		resolver.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//cambiamos el fondo de background para mostrar la palabra
 				palabraSecreta.setText(pass);
@@ -687,17 +827,16 @@ public class Ahorcado extends JFrame implements ActionListener{
 		});
 		
 		//al ejecutar el programa el boton 'Resolver' está desactivado
-		resuelve.setEnabled(true);
+		resolver.setEnabled(true);
 		
-		inicia = new JButton("Iniciar Juego");
-		lblNewLabel.setLabelFor(inicia);
-		inicia.addActionListener(new ActionListener() {
+		iniciar = new JButton("Iniciar Juego");
+		lblNewLabel.setLabelFor(iniciar);
+		iniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//iniciar juego
-				iniciarPartida();
+				//iniciar juego como principiante por defecto (10 intentos)
+				iniciarPartida(0);
 				//desactivamos el boton
-				inicia.setEnabled(false);
-				
+				iniciar.setEnabled(false);
 			}
 		});
 		
@@ -708,12 +847,12 @@ public class Ahorcado extends JFrame implements ActionListener{
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel
 				.createSequentialGroup().addGap(35)
 				.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addComponent(resuelve, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
-						.addComponent(inicia, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
+						.addComponent(resolver, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
+						.addComponent(iniciar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE))
 				.addGap(40)));
 		gl_panel.setVerticalGroup(
 				gl_panel.createParallelGroup(Alignment.LEADING).addGroup(gl_panel.createSequentialGroup().addGap(19)
-						.addComponent(inicia).addGap(18).addComponent(resuelve).addContainerGap(26, Short.MAX_VALUE)));
+						.addComponent(iniciar).addGap(18).addComponent(resolver).addContainerGap(26, Short.MAX_VALUE)));
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 
@@ -721,7 +860,6 @@ public class Ahorcado extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
 		
 	}
 }
