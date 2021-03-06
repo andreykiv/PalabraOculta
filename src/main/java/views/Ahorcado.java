@@ -1,29 +1,17 @@
 package views;
 
 
-import java.awt.Button;
-import java.awt.EventQueue;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Panel;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
-import javax.swing.SwingConstants;
-import javax.swing.BoxLayout;
+
 import javax.swing.ButtonGroup;
 
-import java.awt.Component;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -35,17 +23,16 @@ import javax.swing.ImageIcon;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.TitledBorder;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 import java.util.ArrayList;
 import java.util.Random;
 import java.awt.event.ActionEvent;
 import javax.swing.border.EtchedBorder;
 import java.awt.Color;
-import javax.swing.JTextPane;
+
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
-import javax.swing.JComboBox;
+
 
 public class Ahorcado extends JFrame implements ActionListener{
 
@@ -64,8 +51,6 @@ public class Ahorcado extends JFrame implements ActionListener{
 	//array de botones del teclado
 	private ArrayList<JButton> botonesAbecedario = new ArrayList<JButton>();
 	
-	//array de letras del abecedario
-	private ArrayList<JButton> letrasAbecedario = new ArrayList<JButton>();
 	//array de JLabel 
 	private ArrayList<JLabel> labelsPorPass = new ArrayList<JLabel>();
 	//palabraSecreta
@@ -109,7 +94,7 @@ public class Ahorcado extends JFrame implements ActionListener{
 			caracteresPass.add(pass.charAt(i));
 		}
 	}
-	//creamos los botones del teclado y los pasamos a la array de botonesAbecedario utilizando los valores ASCII
+	// **PENDIENTE** creamos los botones del teclado y los pasamos a la array de botonesAbecedario utilizando los valores ASCII
 	private void crearBotones() {
 		int numLetrasAbecedario = 27;
 		//int del ASCII que equivale a la letra "A"

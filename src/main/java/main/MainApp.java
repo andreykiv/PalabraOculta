@@ -3,7 +3,6 @@ package main;
 import java.awt.EventQueue;
 
 import views.Ahorcado;
-import views.AplicacionGrafica;
 
 public class MainApp {
 
