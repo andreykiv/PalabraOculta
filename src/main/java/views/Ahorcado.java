@@ -55,6 +55,8 @@ public class Ahorcado extends JFrame implements ActionListener{
 	private String[] passArr = new String [] {"NOTMYPASS", "MYPASS", "TOOEASY", "SUPERMAN", "BATMAN", "HACKERMAN", 
 			"HELLOTHERE", "GENERAL", "KENOBI", "THEEND"};
 	
+	private ArrayList<String> passArrStrings = new ArrayList<String>();
+	
 	//pass
 	private String pass;
 	//array de caracteres de la palabra pass
@@ -85,13 +87,20 @@ public class Ahorcado extends JFrame implements ActionListener{
 	//random index del String de pass
 	private int randomIndex() {
 		Random rnd = new Random();
-		int num = rnd.nextInt(10);
+		int num = rnd.nextInt(passArrStrings.size());
 		return num;
+	}
+	
+	//poblamos el array de pass con palabras
+	private void poblarPassArray() {
+		for(int i = 0; i < passArr.length; i++) {
+			passArrStrings.add(passArr[i]);	
+		}
 	}
 	
 	private void randomPass() {
 		String myPass = "";
-		myPass = passArr[randomIndex()];	
+		myPass = passArrStrings.get(randomIndex());	
 		pass = myPass;
 	}
 	//metodo que construye un array de chars que compone la palabra pass 
@@ -247,6 +256,8 @@ public class Ahorcado extends JFrame implements ActionListener{
 		for(int i = 0; i < 5; i++ ) {
 			bombillas[i].setVisible(true);
 		}
+		//poblamos el array con palabras
+		poblarPassArray();
 		//asignamos el valor del pass a la variable pass con este metodo
 		randomPass();
 		// dividimos la palabra secreta en un array de chars
@@ -369,9 +380,11 @@ public class Ahorcado extends JFrame implements ActionListener{
 		JMenu archivo = new JMenu("Archivo");
 		JMenu comoJugar = new JMenu("Como Jugar");
 		JMenu acercaDe = new JMenu("Acerca de");
+		JMenu diccionario = new JMenu("Diccionario");
 		
 		JMenuItem comoJugarItem = new JMenuItem("Como Jugar");
 		JMenuItem acercaDeItem = new JMenuItem("Acerca de");
+		JMenuItem palabraNueva = new JMenuItem("Palabra nueva");
 		
 		JMenuItem nuevoJuego = new JMenuItem("Nuevo juego");
 		JMenuItem salir = new JMenuItem("Salir");
@@ -406,13 +419,22 @@ public class Ahorcado extends JFrame implements ActionListener{
 			}
 		});
 		
+		palabraNueva.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				String nuevaPalabra = JOptionPane.showInputDialog(null, "Introduce una nueva palabra");
+				passArrStrings.add(nuevaPalabra.toUpperCase().replace(" ", ""));
+			}
+		});
+		
 		archivo.add(nuevoJuego);
 		archivo.add(salir);
 		
 		comoJugar.add(comoJugarItem);
 		acercaDe.add(acercaDeItem);
+		diccionario.add(palabraNueva);
 		
 		barraMenu.add(archivo);
+		barraMenu.add(diccionario);
 		barraMenu.add(comoJugar);
 		barraMenu.add(acercaDe);
 		
