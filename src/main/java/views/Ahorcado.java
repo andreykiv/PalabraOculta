@@ -43,7 +43,7 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.JComboBox;
 
-public class Ahorcado extends JFrame {
+public class Ahorcado extends JFrame implements ActionListener{
 
 	private JPanel contentPane;
 	
@@ -68,10 +68,7 @@ public class Ahorcado extends JFrame {
 	private JLabel lblNewLabel = new JLabel("");
 	//botones resolver e iniciar el juego
 	private JButton inicia, resuelve ;
-	
-//	private JButton[] letras = new JButton[] { letraA, letraB, letraC, letraD, letraE, letraF, letraG, letraH, letraI, 
-//			letraJ, letraK, letraL, letraM, letraN, letraÑ, letraO, letraP, letraQ, letraR, letraS, 
-//			letraT, letraU, letraV, letraW, letraX, letraY, letraZ };
+
 	private JButton[] letras = new JButton[27];
 	
 	//atributos de la partida
@@ -263,14 +260,52 @@ public class Ahorcado extends JFrame {
 		JMenuBar barraMenu = new JMenuBar();
 		
 		JMenu archivo = new JMenu("Archivo");
-	
-		JMenuItem comoJugar = new JMenuItem("Como Jugar");
-		JMenuItem acercaDe = new JMenuItem("Acerca De");
+		JMenu comoJugar = new JMenu("Como Jugar");
+		JMenu acercaDe = new JMenu("Acerca de");
 		
-		archivo.add(comoJugar);
-		archivo.add(acercaDe);
+		JMenuItem comoJugarItem = new JMenuItem("Como Jugar");
+		JMenuItem acercaDeItem = new JMenuItem("Acerca de");
+		
+		JMenuItem jugarDeNuevo = new JMenuItem("Nueva partida");
+		JMenuItem salir = new JMenuItem("Salir");
+		
+		jugarDeNuevo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//al hacer el click llamamos a la funcion iniciarPartida();
+				iniciarPartida();
+			}
+		});
+		
+		salir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//al hacer el click llamamos a la funcion iniciarPartida();
+				System.exit(1);
+			}
+		});
+		
+		comoJugarItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//al hacer el click llamamos a la funcion iniciarPartida();
+				JOptionPane.showMessageDialog(contentPane, "Adivina la palabra seleccionando uno de los botones del teclado.");
+			}
+		});
+		
+		acercaDeItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//al hacer el click llamamos a la funcion iniciarPartida();
+				JOptionPane.showMessageDialog(contentPane, "Nombre de alumnos: \n \nMyroslav Andreykiv \nNoelia Barrera \nGerard Bonet");
+			}
+		});
+		
+		archivo.add(jugarDeNuevo);
+		archivo.add(salir);
+		
+		comoJugar.add(comoJugarItem);
+		acercaDe.add(acercaDeItem);
 		
 		barraMenu.add(archivo);
+		barraMenu.add(comoJugar);
+		barraMenu.add(acercaDe);
 		//aplicamos la barramenu a la ventana principal
 		setJMenuBar(barraMenu);
 		
@@ -682,5 +717,11 @@ public class Ahorcado extends JFrame {
 		panel.setLayout(gl_panel);
 		contentPane.setLayout(gl_contentPane);
 
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		
 	}
 }
