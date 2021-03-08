@@ -68,9 +68,9 @@ sido encontrada. Es posible que tras mostrar una pista el jugador gane la partid
 #### 3. Link a un demo con el proyecto desplegado: https://github.com/andreykiv/PalabraOculta
 
 
-#### 4. Lista de instrumentos utilizados.
-
+#### 4. Herramientas utilizadas.
+```
 IDE: Eclipse IDE Version: 2020-12 (4.18.0)
 JRE System Library: jdk.1.8.0_281  
 Maven: version 3.6.3 (integrated within Eclipse)
-
+```
